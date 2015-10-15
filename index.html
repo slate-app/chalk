@@ -53,11 +53,11 @@
 <pre class="highlight php"><code>{layout "html"}
 </code></pre>
 
-<p>Each whole-page template should start with the layout it will use. </p>
+<p>Each whole-page template should start with the layout it will use.</p>
 
 <p>Layouts are used to speed up development, providing the main structure, as well as resuable blocks. Using a block in your template will overwrite the block defined in the layout. See below for more info on the block system.</p>
 
-<p>In most cases, you will just need to use the &lsquo;HTML&rsquo; template, but you can create as many layouts as you want.</p>
+<p>In most cases, you will just need to use the &lsquo;HTML&rsquo; template, but you can create as many layouts as you want. See below for more info on the HTML template.</p>
 
 <h2 id="block-system">Block System</h2>
 <pre class="highlight php"><code>{block header}
@@ -77,6 +77,12 @@
 <p>The basic structure for a layout is on the right.</p>
 
 <h2 id="includes">Includes</h2>
+<pre class="highlight php"><code>{include "alt_footer"}
+</code></pre>
+
+<p>Include any other template inside another one, useful for reusing code blocks, and hiding complexity from the main template.</p>
+
+<p>Template name must be in quotes.</p>
 
 <h2 id="debug">Debug</h2>
 
@@ -84,7 +90,7 @@
 
 <p>This will output an array of data contained in that object.</p>
 
-<aside class="notice">Debug has to be used inside a block.</aside>
+<aside class="notice"><code>debug</code> has to be used inside a block or it will throw an error.</aside>
 
 <h2 id="filters">Filters</h2>
 
@@ -141,24 +147,24 @@
 <aside class="notice">You must always use <code>|resize(width, height, method)</code> when serving images. Do not reference the <code>remote_path</code> directly.</aside>
 
 <h2 id="settings">Settings</h2>
-<pre class="highlight php"><code>settings.company_name
-settings.domain
-settings.contact_email
-settings.phone_number
+<pre class="highlight php"><code>{settings.company_name}
+{settings.domain}
+{settings.contact_email}
+{settings.phone_number}
 
-settings.addresses.address
-settings.addresses.address_next
-settings.addresses.city
-settings.addresses.post_code
-settings.addresses.country
+{settings.addresses.address}
+{settings.addresses.address_next}
+{settings.addresses.city}
+{settings.addresses.post_code}
+{settings.addresses.country}
 
-settings.socials.facebook
-settings.socials.twitter
+{settings.socials.facebook}
+{settings.socials.twitter}
 
-settings.seo.global_title
-settings.seo.global_description
+{settings.seo.global_title}
+{settings.seo.global_description}
 
-settings.logo
+{settings.logo}
 </code></pre>
 
 <p>Slate users are able to manage a lot of their basic settings, such as Company name, social profiles and logo from within their account. All of this data is available to use in the templates, to avoid hard coding anything.</p>
@@ -175,30 +181,54 @@ settings.logo
 
 <p>In order to check the active page or perform anything more complex using the url, you&rsquo;ll need access to the <code class="prettyprint">site</code> object.</p>
 
+<h1 id="assets">Assets</h1>
+<pre class="highlight php"><code>{asset name="asset.ext"}
+</code></pre>
+
+<h1 id="custom-attributes">Custom Attributes</h1>
+
 <h1 id="templates">Templates</h1>
 
 <h2 id="html">HTML</h2>
 
+<p>This is the master layout file, and where you should define your core structure, add meta tags and css and js assets.</p>
+
+<p>This template is then used in all your other &#39;page-based&rsquo; templates.</p>
+
 <h3 id="js">JS</h3>
+
+<p>Javascript should be included before the closing body tag.</p>
+
+<p>The default theme comes with a predefined block for custom javascript assets. Reuse that block in other templates to add non-global javascript to individual pages.</p>
 
 <h3 id="css">CSS</h3>
 
+<p>The default theme comes with a predefined block for custom css assets. Reuse that block in other templates to add non-global javascript to individual pages.</p>
+
 <h2 id="home">Home</h2>
-<pre class="highlight php"><code>{for spotlight in spotlights.home order="random"}
-    {spotlight.title}
-    <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{spotlight.object.thumbnail|resize(780, 480, 'crop')}"</span><span class="nt">&gt;</span>
-    {spotlight.description}
-    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/directors/{spotlight.artist.slug}"</span><span class="nt">&gt;</span>{spotlight.artist.name}<span class="nt">&lt;/a&gt;</span>
-{endfor}
+<pre class="highlight php"><code>{block content}
+    {for spotlight in spotlights.home order="random"}
+        {spotlight.title}
+        <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{spotlight.object.thumbnail|resize(780, 480, 'crop')}"</span><span class="nt">&gt;</span>
+        {spotlight.description}
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/directors/{spotlight.artist.slug}"</span><span class="nt">&gt;</span>{spotlight.artist.name}<span class="nt">&lt;/a&gt;</span>
+    {endfor}
+{endblock}
 </code></pre>
+
+<p>The home template is used to generate the view on the root of the domain.</p>
+
+<p>The main block to replace on this page is <code class="prettyprint">{block content}</code> which will hold all of your content.</p>
+
+<p>Other blocks can be used to add custom footers or headers, or to set the meta title and descriptions.</p>
 
 <h2 id="header">Header</h2>
-<pre class="highlight php"><code>{director.name}
-</code></pre>
+
+<p>Usually where you put your site&rsquo;s navigation etc. The header template needs to be included in other templates to be used. It comes packaged in <code class="prettyprint">{block header}</code> in the default HTML template.</p>
 
 <h2 id="footer">Footer</h2>
-<pre class="highlight php"><code>{director.name}
-</code></pre>
+
+<p>Works as per the header.</p>
 
 <h2 id="director-listing">Director Listing</h2>
 <pre class="highlight php"><code>{for director in directors sort="name"}
@@ -206,6 +236,8 @@ settings.logo
   <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{director.avatar|resize(800, 450, 'crop')}"</span><span class="nt">&gt;</span>
 {endfor}
 </code></pre>
+
+<p>This template controls the layout and content of <code class="prettyprint">/directors/</code>.</p>
 
 <p>Shows a list of all published directors.</p>
 
@@ -271,7 +303,7 @@ settings.logo
 <h2 id="recent-work-view">Recent Work View</h2>
 <pre class="highlight php"><code>{work.title}
 {work.associated_media.description|raw}
-{work.associated_media.thumbnail|resize(800,450,'crop')}
+{work.associated_media.thumbnail|resize(800, 450, 'crop')}
 
 {player}
 </code></pre>
@@ -373,10 +405,6 @@ settings.logo
 <pre class="highlight php"><code>{director.name}
 </code></pre>
 
-<h2 id="player">Player</h2>
-<pre class="highlight php"><code>{director.name}
-</code></pre>
-
 <h2 id="player-embed-form">Player Embed Form</h2>
 <pre class="highlight php"><code>{director.name}
 </code></pre>
@@ -384,6 +412,79 @@ settings.logo
 <h2 id="player-embedded">Player Embedded</h2>
 <pre class="highlight php"><code>{director.name}
 </code></pre>
+
+<h1 id="player">Player</h1>
+<pre class="highlight php"><code>{director.name}
+</code></pre>
+
+<h1 id="pages">Pages</h1>
+
+<h2 id="using-layouts">Using layouts</h2>
+
+<h2 id="placeholders">Placeholders</h2>
+
+<h1 id="location-based-controls">Location based controls</h1>
+
+<h1 id="useful-snippets">Useful Snippets</h1>
+
+<h2 id="next-and-previous-news">Next and Previous News</h2>
+
+<h2 id="multi-video-recent-work-pages">Multi video recent work pages</h2>
+<pre class="highlight php"><code>
+</code></pre>
+
+<p>This works in conjunction with a custom attribute, with a comma separated list of video IDs.</p>
+
+<h2 id="load-different-images-for-mobile">Load different images for mobile</h2>
+
+<blockquote>
+<p>object will be relavant to the content - showreel/spotlight etc.</p>
+</blockquote>
+<pre class="highlight php"><code>{if user_device.mobile and not user_device.tablet }
+    {set img_url = object.thumbnail|resize(640,360, 'resize')}
+{elseif user_device.tablet and not user_device.mobile}
+    {set img_url = object.thumbnail|resize(502,282, 'resize')}
+{else}
+    {set img_url = object.thumbnail|resize(549,309, 'crop')}
+{endif}
+</code></pre>
+
+<blockquote>
+<p>img_url can then be used in the src in your loops</p>
+</blockquote>
+
+<p>Using the device detection, you can set different image sizes to load, to reduce page size for mobile.</p>
+
+<h2 id="linking-to-specifc-videos-on-a-director-39-s-profile">Linking to specifc videos on a director&rsquo;s profile</h2>
+<pre class="highlight php"><code>{set auto_play = site.url matches "/play\\/(.*)/" ? 1 : 0}
+
+{if auto_play == 1}
+    {set uri_parts = site.url|split('/')}
+    {set selected_clip_urlname = uri_parts[uri_parts|length-1]}
+{endif}
+
+{ set selected_clip = null }
+{ set selected_clip_index = 0 }
+
+{set player_media = director.published_showreels[0].clips}
+
+{if selected_clip_urlname }
+    { for media in player_media}
+        { if media.urlname == selected_clip_urlname }
+            { set selected_clip_index = loop.index0 }
+            { set selected_clip = media }
+        { endif }
+    { endfor }
+{endif}
+
+{if not selected_clip}
+    { set selected_clip = player_media[0] }
+{endif}
+</code></pre>
+
+<p>By adding <code class="prettyprint">data-clip-id={work.id}</code> to each item in your list of videos on a director&rsquo;s profile, you can make use of in built pushstates.</p>
+
+<p>When accessing one of these urls directly, it will set the <code class="prettyprint">selected_clip</code>, and you can then use that to change the first video that loads on the page.</p>
 
       </div>
       <div class="dark-box">
