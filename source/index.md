@@ -29,11 +29,11 @@ Chalk is based on Twig, and follows the same principles.
 {layout "html"}
 ```
 
-Each whole-page template should start with the layout it will use. 
+Each whole-page template should start with the layout it will use.
 
 Layouts are used to speed up development, providing the main structure, as well as resuable blocks. Using a block in your template will overwrite the block defined in the layout. See below for more info on the block system.
 
-In most cases, you will just need to use the 'HTML' template, but you can create as many layouts as you want.
+In most cases, you will just need to use the 'HTML' template, but you can create as many layouts as you want. See below for more info on the HTML template.
 
 ##Block System
 
@@ -56,12 +56,19 @@ The basic structure for a layout is on the right.
 
 ##Includes
 
+```php
+{include "alt_footer"}
+```
+Include any other template inside another one, useful for reusing code blocks, and hiding complexity from the main template.
+
+Template name must be in quotes.
+
 ##Debug
 Add `{debug(object)}` to your templates, where _object_ is the item you want to see available tags for.
 
 This will output an array of data contained in that object.
 
-<aside class="notice">Debug has to be used inside a block.</aside>
+<aside class="notice"><code>debug</code> has to be used inside a block or it will throw an error.</aside>
 
 ##Filters
 The below is a list of common filters you can use to modify what an object's output. For example `{director.biography|striptags}` would remove any html found in the director's biography. Filters are initiated with a `|`.
@@ -84,24 +91,24 @@ upper | _none_
 ##Settings
 
 ```php
-settings.company_name
-settings.domain
-settings.contact_email
-settings.phone_number
+{settings.company_name}
+{settings.domain}
+{settings.contact_email}
+{settings.phone_number}
 
-settings.addresses.address
-settings.addresses.address_next
-settings.addresses.city
-settings.addresses.post_code
-settings.addresses.country
+{settings.addresses.address}
+{settings.addresses.address_next}
+{settings.addresses.city}
+{settings.addresses.post_code}
+{settings.addresses.country}
 
-settings.socials.facebook
-settings.socials.twitter
+{settings.socials.facebook}
+{settings.socials.twitter}
 
-settings.seo.global_title
-settings.seo.global_description
+{settings.seo.global_title}
+{settings.seo.global_description}
 
-settings.logo
+{settings.logo}
 ```
 
 Slate users are able to manage a lot of their basic settings, such as Company name, social profiles and logo from within their account. All of this data is available to use in the templates, to avoid hard coding anything.
@@ -120,27 +127,57 @@ Make use of this in footers and contact pages etc.
 
 In order to check the active page or perform anything more complex using the url, you'll need access to the `site` object.
 
+# Assets
+
+```php
+{asset name="asset.ext"}
+```
+
+# Custom Attributes
+
 #Templates
 ## HTML
+
+This is the master layout file, and where you should define your core structure, add meta tags and css and js assets.
+
+This template is then used in all your other 'page-based' templates.
+
 ### JS
+Javascript should be included before the closing body tag.
+
+The default theme comes with a predefined block for custom javascript assets. Reuse that block in other templates to add non-global javascript to individual pages.
+
 ### CSS
+
+The default theme comes with a predefined block for custom css assets. Reuse that block in other templates to add non-global javascript to individual pages.
+
 ## Home
+
 ```php
-{for spotlight in spotlights.home order="random"}
-    {spotlight.title}
-    <img src="{spotlight.object.thumbnail|resize(780, 480, 'crop')}">
-    {spotlight.description}
-    <a href="/directors/{spotlight.artist.slug}">{spotlight.artist.name}</a>
-{endfor}
+{block content}
+    {for spotlight in spotlights.home order="random"}
+        {spotlight.title}
+        <img src="{spotlight.object.thumbnail|resize(780, 480, 'crop')}">
+        {spotlight.description}
+        <a href="/directors/{spotlight.artist.slug}">{spotlight.artist.name}</a>
+    {endfor}
+{endblock}
 ```
+
+The home template is used to generate the view on the root of the domain.
+
+The main block to replace on this page is `{block content}` which will hold all of your content.
+
+Other blocks can be used to add custom footers or headers, or to set the meta title and descriptions.
+
 ## Header
-```php
-{director.name}
-```
+
+Usually where you put your site's navigation etc. The header template needs to be included in other templates to be used. It comes packaged in `{block header}` in the default HTML template.
+
 ## Footer
-```php
-{director.name}
-```
+
+Works as per the header.
+
 ## Director Listing
 
 ```php
@@ -149,6 +186,8 @@ In order to check the active page or perform anything more complex using the url
   <img src="{director.avatar|resize(800, 450, 'crop')}">
 {endfor}
 ```
+
+This template controls the layout and content of `/directors/`.
 
 Shows a list of all published directors.
 
@@ -198,7 +237,7 @@ limit | _integer_
 ```php
 {work.title}
 {work.associated_media.description|raw}
-{work.associated_media.thumbnail|resize(800,450,'crop')}
+{work.associated_media.thumbnail|resize(800, 450, 'crop')}
 
 {player}
 ```
@@ -299,10 +338,6 @@ limit | _integer_
 ```php
 {director.name}
 ```
-## Player
-```php
-{director.name}
-```
 ## Player Embed Form
 ```php
 {director.name}
@@ -311,3 +346,79 @@ limit | _integer_
 ```php
 {director.name}
 ```
+
+# Player
+```php
+{director.name}
+```
+
+# Pages
+## Using layouts
+## Placeholders
+
+# Location based controls
+
+# Useful Snippets
+
+## Next and Previous News
+
+## Multi video recent work pages
+
+```php
+
+```
+
+This works in conjunction with a custom attribute, with a comma separated list of video IDs.
+
+## Load different images for mobile
+
+> object will be relavant to the content - showreel/spotlight etc.
+
+```php
+{if user_device.mobile and not user_device.tablet }
+    {set img_url = object.thumbnail|resize(640,360, 'resize')}
+{elseif user_device.tablet and not user_device.mobile}
+    {set img_url = object.thumbnail|resize(502,282, 'resize')}
+{else}
+    {set img_url = object.thumbnail|resize(549,309, 'crop')}
+{endif}
+```
+
+> img_url can then be used in the src in your loops
+
+Using the device detection, you can set different image sizes to load, to reduce page size for mobile.
+
+## Linking to specifc videos on a director's profile
+
+```php
+{set auto_play = site.url matches "/play\\/(.*)/" ? 1 : 0}
+
+{if auto_play == 1}
+    {set uri_parts = site.url|split('/')}
+    {set selected_clip_urlname = uri_parts[uri_parts|length-1]}
+{endif}
+
+{ set selected_clip = null }
+{ set selected_clip_index = 0 }
+
+{set player_media = director.published_showreels[0].clips}
+
+{if selected_clip_urlname }
+    { for media in player_media}
+        { if media.urlname == selected_clip_urlname }
+            { set selected_clip_index = loop.index0 }
+            { set selected_clip = media }
+        { endif }
+    { endfor }
+{endif}
+
+{if not selected_clip}
+    { set selected_clip = player_media[0] }
+{endif}
+```
+By adding `data-clip-id={work.id}` to each item in your list of videos on a director's profile, you can make use of in built pushstates.
+
+When accessing one of these urls directly, it will set the `selected_clip`, and you can then use that to change the first video that loads on the page.
+
+
+
