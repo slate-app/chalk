@@ -73,18 +73,18 @@ This will output an array of data contained in that object.
 ##Filters
 The below is a list of common filters you can use to modify what an object's output. For example `{director.biography|striptags}` would remove any html found in the director's biography. Filters are initiated with a `|`.
 
-Helper | Arguments
---- | ---
-date |
-length |
-lower | _none_
-raw |
-replace |
-resize | <ul><li>width</li><li>height</li><li>method<ul><li>resize (default)</li><li>crop</li></ul></li></ul>
-striptags |
-title |
+Helper | Function | Arguments
+--- | --- | ---
+date | Format a date | [See PHP Docs](http://uk1.php.net/manual/en/function.date.php)
+length | Gets the length of an array |
+lower | Sets a string to lowercase | _none_
+raw | Outputs a string as HTML | _none_
+replace | Replaces contents of a string| {"Foo": "Bar", " ": "-"}
+resize | Resizes and manipulates an image | <ul><li>width</li><li>height</li><li>method<ul><li>resize (default)</li><li>crop</li></ul></li></ul>
+striptags | Removes all HTML from a string |
+title | Sets a string to Title Case | _none_
 trim |
-upper | _none_
+upper | Sets a string to UPPERCASE | _none_
 
 <aside class="notice">You must always use <code>|resize(width, height, method)</code> when serving images. Do not reference the <code>remote_path</code> directly.</aside>
 
@@ -101,6 +101,8 @@ upper | _none_
 {settings.addresses.city}
 {settings.addresses.post_code}
 {settings.addresses.country}
+{settings.addresses.latitutde}
+{settings.addresses.longitude}
 
 {settings.socials.facebook}
 {settings.socials.twitter}
@@ -127,13 +129,22 @@ Make use of this in footers and contact pages etc.
 
 In order to check the active page or perform anything more complex using the url, you'll need access to the `site` object.
 
-# Assets
+##Stylesheets and Scripts
+These will be uploaded to Slate as Assets, and then referenced in your layout.
+
+See [Assets](#assets) below for more info.
+
+##Inline CSS/JS
 
 ```php
-{asset name="asset.ext"}
+{literal}
+$('.selector').on('click', function() {
+	//do stuff
+});
+{endliteral}
 ```
 
-# Custom Attributes
+In order to use inline CSS or JS, you need to escape the `{}`, so that they're not interpreted as Chalk code. To do this, wrap your code blocks in `{literal}` tags.
 
 #Templates
 ## HTML
@@ -143,13 +154,13 @@ This is the master layout file, and where you should define your core structure,
 This template is then used in all your other 'page-based' templates.
 
 ### JS
-Javascript should be included before the closing body tag.
+Javascript should be included before the closing body tag, with the exception of jquery, which needs to be loaded in the head.
 
 The default theme comes with a predefined block for custom javascript assets. Reuse that block in other templates to add non-global javascript to individual pages.
 
 ### CSS
 
-The default theme comes with a predefined block for custom css assets. Reuse that block in other templates to add non-global javascript to individual pages.
+The default theme comes with a predefined block for custom css assets. Reuse that block in other templates to add non-global CSS to individual pages.
 
 ## Home
 
@@ -157,7 +168,8 @@ The default theme comes with a predefined block for custom css assets. Reuse tha
 {block content}
     {for spotlight in spotlights.home order="random"}
         {spotlight.title}
-        <img src="{spotlight.object.thumbnail|resize(780, 480, 'crop')}">
+        <!--{spotlight.type}-->
+        <img src="{spotlight.object.thumbnail|resize(780, 480, 'crop')}&quality=80">
         {spotlight.description}
         <a href="/directors/{spotlight.artist.slug}">{spotlight.artist.name}</a>
     {endfor}
@@ -169,6 +181,8 @@ The home template is used to generate the view on the root of the domain.
 The main block to replace on this page is `{block content}` which will hold all of your content.
 
 Other blocks can be used to add custom footers or headers, or to set the meta title and descriptions.
+
+Videos, Images, Artists and News can all be added to a spotlight. As they have different data structures, be sure to check the spotlight type and set the content accordingly.
 
 ## Header
 
@@ -189,9 +203,9 @@ Works as per the header.
 
 This template controls the layout and content of `/directors/`.
 
-Shows a list of all published directors.
+The snippet on the right Shows a list of all published directors, sorted by name.
 
-If your client would like to control the order of the directors manually, you'll need to create a spotlight.
+If your client would like to control the order of the directors manually, you'll need to create a [spotlight](#spotlights).
 
 Option  | Parameters 
 --- | --- 
@@ -204,7 +218,16 @@ limit | _integer_
 ```php
 {director.name}
 {director.biography|raw}
-<img src="{director.avatar|resize(600, 340, 'crop')}">
+<img src="{director.avatar|resize(600, 340, 'crop')}&quality=80">
+
+{for reel in director.published_showreels}
+	{reel.displayed_name}
+	{for work in reel.media}
+		{work.title}
+        <img src="{work.thumbnail|resize(600, 340, 'crop')}&quality=80}">
+	{endfor}
+{endfor}
+
 {for content_type in director.content_types}
     {content_type}
 {endfor}
@@ -220,6 +243,13 @@ limit | _integer_
     {award.url}
 {endfor}
 ```
+
+The `director_profile` template controls the layout and content of `/director/{director-name}`. 
+
+The content on the right shows the basic content structure.
+
+See [Player](#player) below for details on how to include a video player on this page.
+
 ## Recent Work Listing
 ```php
 {for work in recent_works}
@@ -233,6 +263,15 @@ limit | _integer_
 
 {endfor}
 ```
+
+The `recent_works_listing` is used to control the layout and contents of `/work`.
+
+`{recent_works}` is an array containing all content added to Recent Work in the Slate admin.
+
+Data associated with each video or image is available inside `associated_media`.
+
+The publication date for Recent Work items is taken from the linked library video or image, and the `{urlname}` is built from the video or image's title.
+
 ## Recent Work View
 ```php
 {work.title}
@@ -356,7 +395,238 @@ limit | _integer_
 ## Using layouts
 ## Placeholders
 
+#Spotlights
+
+# Assets
+
+```php
+{asset name="assetname.ext"}
+```
+
+In addition to the templates, Slate allows you full control over stylesheets, javascript files, fonts and images. 
+
+These are all controlled via the 'Assets' section, accessible via the link on the template listing screen.
+
+Once added, assets are able to be included in any file using the syntax on the right.
+
+CSS and JS assets will be editable inside Slate. After uploading the asset for the first time, subsequent changes should be pasted into the asset editor.
+
+##Fonts
+If you wish to use local fonts, instead of a webfont service, there are a few points to note.
+
+Any font files you upload to Assets will have `Access-Control-Allow-Origin: *` added.
+
+These can be included using `@font-face` inline in a template, using the asset include syntax, or they can be referenced via an absolute path in your stylesheet.
+
+To get the absolute path, head to the asset listing page, and copy the path on the right. The base path remains the same for all assets, with only the filename changing.
+
+If you use a CSS pre-processor, it is a good idea to add this base path as a variable for all image or font files you reference, as they will all need to be absolute urls.
+
+# Custom Attributes
+
+Each type of content has a predefined list of meta data/credits associated with it, as shown above. You might need to extend this for your needs. 
+
+Attributes can be added to:
+
+- Videos
+- Illustrations
+- Directors
+- Photographers
+- News
+- Showreels
+
+There are 8 types of attributes that can be added:
+
+- Integer
+- Boolean
+- Decimal
+- String
+- Floating Point Number
+- Autocomplete Collection
+- WYSIWYG Editor
+- File Upload
+
+##Autocomplete Collection
+```php
+{for editor in work.editors}
+	{editor.value}
+{endfor}
+```
+
+This will build up a list of entries that can be reused to save the user typing the whole ting each time, and to avoid inconsistencies. Content is stored as an array.
+
+##File Upload
+```php
+{for file in work.attribute_name.files}
+	{debug(file)}
+{endfor}
+
+{work.spotlight_image.files[0].file|resize(1200, 0)}
+```
+Files are also stored in an array, and depending on their usage can be looped through or used to show a single item.
+
+#Image manipulation
+By default, `|resize()` only lets you set width, height and whether to crop or resize. However, it's possible to add a series of extra parameters to the image url.
+
+These are added outside of the `{}`, starting with an `&`.
+
+##Width
+```php
+{img|resize(300, 0)}
+```
+Set in the `|resize()` helper.
+
+The desired width of the image; it will resize according to the method you select (see below). If you do not want to restrict width, pass in 0 (0x100.jpg will only restrict to 100 height).
+
+##Height
+```php
+{img|resize(0, 100)}
+```
+Set in the `|resize()` helper.
+
+The desired height of the image; it will resize according to the method you select (see below). Set to 0 to not restrict height.
+
+##Crop or Resize
+```php
+{img|resize(300, 0)}
+
+{img|resize(300, 150, 'crop')}
+```
+
+Set in the `|resize()` helper.
+
+Resize is the default method
+
+Both dimensions must be supplied in order to crop an image
+
+##Quality
+```php
+<img src="{img|resize(300, 0)}&quality=80">
+```
+
+The quality it should resample to; from 0 to 100. Will convert to 0-9 automatically for PNG, 1-100 for JPG.
+
+We recommend applying compression to all images.
+
+##Gravity
+```php
+<img src="{img|resize(300, 150, 'crop')}&gravity=n">
+```
+Used in combination with `crop`, defines the area to crop from.
+
+Possible values:
+
+- nw => Top left
+- n => Top
+- ne => Top right
+- e => Right
+- se => Bottom right
+- s => Bottom
+- sw => Bottom left
+- w => Left
+
+Any other value, be it center, phteven or no value at all will result in a standard center crop.
+
+Note: when processed, the value is:
+
+- Converted to lower case
+- Any dashes, underscores, spaces are replaced with an empty string
+- North/east/south/west written in full are converted to their single character representation
+- As a result, North East or south-west are also valid values.
+
+##Interlace
+```php
+<img src="{img|resize(300, 0)}&interlace=plane">
+```
+
+Allows you to set the interlace method (progressive image).
+
+Possible values:
+
+- line
+- plane
+
+Any other value will result in no interlacing and as such is the default behaviour.
+
+Please note that interlacing PNGs actually makes them bigger, the image manipulator currently does nothing to prevent this.
+
+##Crop
+```php
+<img src="{img|resize(300, 150, 'crop')}&crop[x]=3000&crop[y]=1000&crop[width]=600&crop[height]=2000">
+```
+
+The crop settings allow you to specify an area that should be cropped out of the original, before applying the necessary size transformations.
+
+- x => The X (horizontal coordinate) where the cropping should start
+- y => The Y (vertical coordinate) where the cropping should start
+- width => The width of the crop box
+- height => The height of the crop box
+
+So say you have an image that's 5000 by 5000 pixels. You request a resized version as on the right.
+
+What you ultimately want is an image that is exactly 300x150. What the tool does first though, is grab an area 600x2000 out of the original 5000x5000 image, starting at 3000 pixels from the left, 1000 from the top. So the area it grabs is from 3000,1000 to 3600,3000.
+
+The ratio does not match however, so it will now resize that new 600x2000 "image" (crop) down to 300x1000 first. Then it crops off 425 pixels at both the top and bottom to get to that 150 height (1000 - 150 = 850 pixels too many, so it evenly cuts them off).
+If you had given it resize as method, it would resize that 600x2000 all the way down to 45x150. Without a height restriction you would've received 300x1000. And so on.
+
+##Effects
+```php
+<img src="{img|resize(300, 150)}&effects=greyscale">
+```
+
+Effects to apply to the image. This can be either comma separated (?effects=effect1,effect2) or as an array (?effects[]=effect1&effects[]=effect2). The following are valid effects:
+
+- greyscale
+  - makes the image greyscale
+  - Aliases: bw, grayscale, desaturate
+- invert
+  - inverts the image
+  - Aliases: negative
+- sepia
+  - applies a sepia effect
+
+##Format
+```php
+<img src="{img|resize(300, 0)}&format=jpeg">
+```
+
+The output format. One of jpg, jpeg, png or gif. Gives exactly 0 fucks about any implications that come with these conversions, this is entirely up to the user; i.e. it will not prevent you from converting a transparent PNG to a JPG (and thus losing all transparency).
+
 # Location based controls
+```php
+{set location = user_location()}
+
+{set regions = ['US', 'GB']}
+
+{set selected_location = location.country_code }
+
+{if site.query.region|upper }
+    { set selected_location = site.query.region|upper }
+{elseif "Europe" in location.time_zone}
+    {set selected_location = 'GB'}
+{elseif selected_location not in regions}
+    { set selected_location = 'US' }
+{endif}
+
+```
+If you need to show different content based on a user's location, there is an object containing that information.
+
+This would be used in conjunction with an attribute to only show the relevant content.
+
+The example on the right checks for a `?region=XX` query parameter in the url and overrides the user's IP based location with one set via the site, using a dropdown select for example.
+
+# Device detection
+```php
+{if user_device.mobile}
+	//Do Stuff
+{elseif user_device.tablet}
+	//Do Other Stuff
+{else}
+	//Do Default Stuff
+{endif}
+```
+
+If you need to detect the user's device in order to change the displayed content or functionality, `user_device` will return true/false for mobile and tablet, as on the right.
 
 # Useful Snippets
 
@@ -365,10 +635,19 @@ limit | _integer_
 ## Multi video recent work pages
 
 ```php
-
+{set full_playlist = [work]}
+{if work.campaign_name[0].value}
+    {for other_work in works}
+        {if other_work.campaign_name[0].value == work.campaign_name[0].value and other_work.id != work.id}
+            {set full_playlist = full_playlist|merge([other_work])}
+        {endif}
+    {endfor}
+{endif}
 ```
 
-This works in conjunction with a custom attribute, with a comma separated list of video IDs.
+The example on the right uses a `campaign_name` custom attribute. This would find all pieces of work with the same 'Campaign Name' as the currently viewed work and assigns them to a new array `full_playlist`.
+
+This array can then be looped through to show the work.
 
 ## Load different images for mobile
 
