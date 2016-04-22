@@ -6,14 +6,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Slate developer docs</title>
 
-    <link href="stylesheets/screen.css" rel="stylesheet" type="text/css" media="screen" />
-    <link href="stylesheets/print.css" rel="stylesheet" type="text/css" media="print" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-      <script src="javascripts/all.js" type="text/javascript"></script>
-
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight, .highlight .w {
+  color: #f8f8f2;
+  background-color: #272822;
+}
+.highlight .err {
+  color: #151515;
+  background-color: #ac4142;
+}
+.highlight .c, .highlight .cd, .highlight .cm, .highlight .c1, .highlight .cs {
+  color: #505050;
+}
+.highlight .cp {
+  color: #f4bf75;
+}
+.highlight .nt {
+  color: #f4bf75;
+}
+.highlight .o, .highlight .ow {
+  color: #d0d0d0;
+}
+.highlight .p, .highlight .pi {
+  color: #d0d0d0;
+}
+.highlight .gi {
+  color: #90a959;
+}
+.highlight .gd {
+  color: #ac4142;
+}
+.highlight .gh {
+  color: #6a9fb5;
+  background-color: #151515;
+  font-weight: bold;
+}
+.highlight .k, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kv {
+  color: #aa759f;
+}
+.highlight .kc {
+  color: #d28445;
+}
+.highlight .kt {
+  color: #d28445;
+}
+.highlight .kd {
+  color: #d28445;
+}
+.highlight .s, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
+  color: #90a959;
+}
+.highlight .sr {
+  color: #75b5aa;
+}
+.highlight .si {
+  color: #8f5536;
+}
+.highlight .se {
+  color: #8f5536;
+}
+.highlight .nn {
+  color: #f4bf75;
+}
+.highlight .nc {
+  color: #f4bf75;
+}
+.highlight .no {
+  color: #f4bf75;
+}
+.highlight .na {
+  color: #6a9fb5;
+}
+.highlight .m, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mb, .highlight .mx {
+  color: #90a959;
+}
+.highlight .ss {
+  color: #90a959;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
   </head>
 
-  <body class="index">
+  <body class="index" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -22,6 +100,8 @@
     </a>
     <div class="tocify-wrapper">
       <img src="images/logo.png" />
+        <div class="lang-selector">
+        </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -99,47 +179,58 @@
 <table><thead>
 <tr>
 <th>Helper</th>
+<th>Function</th>
 <th>Arguments</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>date</td>
-<td></td>
+<td>Format a date</td>
+<td><a href="http://uk1.php.net/manual/en/function.date.php">See PHP Docs</a></td>
 </tr>
 <tr>
 <td>length</td>
+<td>Gets the length of an array</td>
 <td></td>
 </tr>
 <tr>
 <td>lower</td>
+<td>Sets a string to lowercase</td>
 <td><em>none</em></td>
 </tr>
 <tr>
 <td>raw</td>
-<td></td>
+<td>Outputs a string as HTML</td>
+<td><em>none</em></td>
 </tr>
 <tr>
 <td>replace</td>
-<td></td>
+<td>Replaces contents of a string</td>
+<td>{&ldquo;Foo&rdquo;: &ldquo;Bar&rdquo;, &ldquo; &rdquo;: &ldquo;-&rdquo;}</td>
 </tr>
 <tr>
 <td>resize</td>
+<td>Resizes and manipulates an image</td>
 <td><ul><li>width</li><li>height</li><li>method<ul><li>resize (default)</li><li>crop</li></ul></li></ul></td>
 </tr>
 <tr>
 <td>striptags</td>
+<td>Removes all HTML from a string</td>
 <td></td>
 </tr>
 <tr>
 <td>title</td>
-<td></td>
+<td>Sets a string to Title Case</td>
+<td><em>none</em></td>
 </tr>
 <tr>
 <td>trim</td>
 <td></td>
+<td></td>
 </tr>
 <tr>
 <td>upper</td>
+<td>Sets a string to UPPERCASE</td>
 <td><em>none</em></td>
 </tr>
 </tbody></table>
@@ -157,6 +248,8 @@
 {settings.addresses.city}
 {settings.addresses.post_code}
 {settings.addresses.country}
+{settings.addresses.latitutde}
+{settings.addresses.longitude}
 
 {settings.socials.facebook}
 {settings.socials.twitter}
@@ -181,11 +274,21 @@
 
 <p>In order to check the active page or perform anything more complex using the url, you&rsquo;ll need access to the <code class="prettyprint">site</code> object.</p>
 
-<h1 id="assets">Assets</h1>
-<pre class="highlight php"><code>{asset name="asset.ext"}
+<h2 id="stylesheets-and-scripts">Stylesheets and Scripts</h2>
+
+<p>These will be uploaded to Slate as Assets, and then referenced in your layout.</p>
+
+<p>See <a href="#assets">Assets</a> below for more info.</p>
+
+<h2 id="inline-css-js">Inline CSS/JS</h2>
+<pre class="highlight php"><code>{literal}
+$('.selector').on('click', function() {
+    //do stuff
+});
+{endliteral}
 </code></pre>
 
-<h1 id="custom-attributes">Custom Attributes</h1>
+<p>In order to use inline CSS or JS, you need to escape the <code class="prettyprint">{}</code>, so that they&rsquo;re not interpreted as Chalk code. To do this, wrap your code blocks in <code class="prettyprint">{literal}</code> tags.</p>
 
 <h1 id="templates">Templates</h1>
 
@@ -197,19 +300,20 @@
 
 <h3 id="js">JS</h3>
 
-<p>Javascript should be included before the closing body tag.</p>
+<p>Javascript should be included before the closing body tag, with the exception of jquery, which needs to be loaded in the head.</p>
 
 <p>The default theme comes with a predefined block for custom javascript assets. Reuse that block in other templates to add non-global javascript to individual pages.</p>
 
 <h3 id="css">CSS</h3>
 
-<p>The default theme comes with a predefined block for custom css assets. Reuse that block in other templates to add non-global javascript to individual pages.</p>
+<p>The default theme comes with a predefined block for custom css assets. Reuse that block in other templates to add non-global CSS to individual pages.</p>
 
 <h2 id="home">Home</h2>
 <pre class="highlight php"><code>{block content}
     {for spotlight in spotlights.home order="random"}
         {spotlight.title}
-        <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{spotlight.object.thumbnail|resize(780, 480, 'crop')}"</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!--{spotlight.type}--&gt;</span>
+        <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{spotlight.object.thumbnail|resize(780, 480, 'crop')}&amp;quality=80"</span><span class="nt">&gt;</span>
         {spotlight.description}
         <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/directors/{spotlight.artist.slug}"</span><span class="nt">&gt;</span>{spotlight.artist.name}<span class="nt">&lt;/a&gt;</span>
     {endfor}
@@ -221,6 +325,8 @@
 <p>The main block to replace on this page is <code class="prettyprint">{block content}</code> which will hold all of your content.</p>
 
 <p>Other blocks can be used to add custom footers or headers, or to set the meta title and descriptions.</p>
+
+<p>Videos, Images, Artists and News can all be added to a spotlight. As they have different data structures, be sure to check the spotlight type and set the content accordingly.</p>
 
 <h2 id="header">Header</h2>
 
@@ -239,9 +345,9 @@
 
 <p>This template controls the layout and content of <code class="prettyprint">/directors/</code>.</p>
 
-<p>Shows a list of all published directors.</p>
+<p>The snippet on the right Shows a list of all published directors, sorted by name.</p>
 
-<p>If your client would like to control the order of the directors manually, you&rsquo;ll need to create a spotlight.</p>
+<p>If your client would like to control the order of the directors manually, you&rsquo;ll need to create a <a href="#spotlights">spotlight</a>.</p>
 
 <table><thead>
 <tr>
@@ -270,7 +376,16 @@
 <h2 id="director-profile">Director Profile</h2>
 <pre class="highlight php"><code>{director.name}
 {director.biography|raw}
-<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{director.avatar|resize(600, 340, 'crop')}"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{director.avatar|resize(600, 340, 'crop')}&amp;quality=80"</span><span class="nt">&gt;</span>
+
+{for reel in director.published_showreels}
+    {reel.displayed_name}
+    {for work in reel.media}
+        {work.title}
+        <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{work.thumbnail|resize(600, 340, 'crop')}&amp;quality=80}"</span><span class="nt">&gt;</span>
+    {endfor}
+{endfor}
+
 {for content_type in director.content_types}
     {content_type}
 {endfor}
@@ -287,6 +402,12 @@
 {endfor}
 </code></pre>
 
+<p>The <code class="prettyprint">director_profile</code> template controls the layout and content of <code class="prettyprint">/director/{director-name}</code>. </p>
+
+<p>The content on the right shows the basic content structure.</p>
+
+<p>See <a href="#player">Player</a> below for details on how to include a video player on this page.</p>
+
 <h2 id="recent-work-listing">Recent Work Listing</h2>
 <pre class="highlight php"><code>{for work in recent_works}
 
@@ -299,6 +420,14 @@
 
 {endfor}
 </code></pre>
+
+<p>The <code class="prettyprint">recent_works_listing</code> is used to control the layout and contents of <code class="prettyprint">/work</code>.</p>
+
+<p><code class="prettyprint">{recent_works}</code> is an array containing all content added to Recent Work in the Slate admin.</p>
+
+<p>Data associated with each video or image is available inside <code class="prettyprint">associated_media</code>.</p>
+
+<p>The publication date for Recent Work items is taken from the linked library video or image, and the <code class="prettyprint">{urlname}</code> is built from the video or image&rsquo;s title.</p>
 
 <h2 id="recent-work-view">Recent Work View</h2>
 <pre class="highlight php"><code>{work.title}
@@ -423,17 +552,272 @@
 
 <h2 id="placeholders">Placeholders</h2>
 
+<h1 id="spotlights">Spotlights</h1>
+
+<h1 id="assets">Assets</h1>
+<pre class="highlight php"><code>{asset name="assetname.ext"}
+</code></pre>
+
+<p>In addition to the templates, Slate allows you full control over stylesheets, javascript files, fonts and images. </p>
+
+<p>These are all controlled via the &#39;Assets&rsquo; section, accessible via the link on the template listing screen.</p>
+
+<p>Once added, assets are able to be included in any file using the syntax on the right.</p>
+
+<p>CSS and JS assets will be editable inside Slate. After uploading the asset for the first time, subsequent changes should be pasted into the asset editor.</p>
+
+<h2 id="fonts">Fonts</h2>
+
+<p>If you wish to use local fonts, instead of a webfont service, there are a few points to note.</p>
+
+<p>Any font files you upload to Assets will have <code class="prettyprint">Access-Control-Allow-Origin: *</code> added.</p>
+
+<p>These can be included using <code class="prettyprint">@font-face</code> inline in a template, using the asset include syntax, or they can be referenced via an absolute path in your stylesheet.</p>
+
+<p>To get the absolute path, head to the asset listing page, and copy the path on the right. The base path remains the same for all assets, with only the filename changing.</p>
+
+<p>If you use a CSS pre-processor, it is a good idea to add this base path as a variable for all image or font files you reference, as they will all need to be absolute urls.</p>
+
+<h1 id="custom-attributes">Custom Attributes</h1>
+
+<p>Each type of content has a predefined list of meta data/credits associated with it, as shown above. You might need to extend this for your needs. </p>
+
+<p>Attributes can be added to:</p>
+
+<ul>
+<li>Videos</li>
+<li>Illustrations</li>
+<li>Directors</li>
+<li>Photographers</li>
+<li>News</li>
+<li>Showreels</li>
+</ul>
+
+<p>There are 8 types of attributes that can be added:</p>
+
+<ul>
+<li>Integer</li>
+<li>Boolean</li>
+<li>Decimal</li>
+<li>String</li>
+<li>Floating Point Number</li>
+<li>Autocomplete Collection</li>
+<li>WYSIWYG Editor</li>
+<li>File Upload</li>
+</ul>
+
+<h2 id="autocomplete-collection">Autocomplete Collection</h2>
+<pre class="highlight php"><code>{for editor in work.editors}
+    {editor.value}
+{endfor}
+</code></pre>
+
+<p>This will build up a list of entries that can be reused to save the user typing the whole ting each time, and to avoid inconsistencies. Content is stored as an array.</p>
+
+<h2 id="file-upload">File Upload</h2>
+<pre class="highlight php"><code>{for file in work.attribute_name.files}
+    {debug(file)}
+{endfor}
+
+{work.spotlight_image.files[0].file|resize(1200, 0)}
+</code></pre>
+
+<p>Files are also stored in an array, and depending on their usage can be looped through or used to show a single item.</p>
+
+<h1 id="image-manipulation">Image manipulation</h1>
+
+<p>By default, <code class="prettyprint">|resize()</code> only lets you set width, height and whether to crop or resize. However, it&rsquo;s possible to add a series of extra parameters to the image url.</p>
+
+<p>These are added outside of the <code class="prettyprint">{}</code>, starting with an <code class="prettyprint">&amp;</code>.</p>
+
+<h2 id="width">Width</h2>
+<pre class="highlight php"><code>{img|resize(300, 0)}
+</code></pre>
+
+<p>Set in the <code class="prettyprint">|resize()</code> helper.</p>
+
+<p>The desired width of the image; it will resize according to the method you select (see below). If you do not want to restrict width, pass in 0 (0x100.jpg will only restrict to 100 height).</p>
+
+<h2 id="height">Height</h2>
+<pre class="highlight php"><code>{img|resize(0, 100)}
+</code></pre>
+
+<p>Set in the <code class="prettyprint">|resize()</code> helper.</p>
+
+<p>The desired height of the image; it will resize according to the method you select (see below). Set to 0 to not restrict height.</p>
+
+<h2 id="crop-or-resize">Crop or Resize</h2>
+<pre class="highlight php"><code>{img|resize(300, 0)}
+
+{img|resize(300, 150, 'crop')}
+</code></pre>
+
+<p>Set in the <code class="prettyprint">|resize()</code> helper.</p>
+
+<p>Resize is the default method</p>
+
+<p>Both dimensions must be supplied in order to crop an image</p>
+
+<h2 id="quality">Quality</h2>
+<pre class="highlight php"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{img|resize(300, 0)}&amp;quality=80"</span><span class="nt">&gt;</span>
+</code></pre>
+
+<p>The quality it should resample to; from 0 to 100. Will convert to 0-9 automatically for PNG, 1-100 for JPG.</p>
+
+<p>We recommend applying compression to all images.</p>
+
+<h2 id="gravity">Gravity</h2>
+<pre class="highlight php"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{img|resize(300, 150, 'crop')}&amp;gravity=n"</span><span class="nt">&gt;</span>
+</code></pre>
+
+<p>Used in combination with <code class="prettyprint">crop</code>, defines the area to crop from.</p>
+
+<p>Possible values:</p>
+
+<ul>
+<li>nw =&gt; Top left</li>
+<li>n =&gt; Top</li>
+<li>ne =&gt; Top right</li>
+<li>e =&gt; Right</li>
+<li>se =&gt; Bottom right</li>
+<li>s =&gt; Bottom</li>
+<li>sw =&gt; Bottom left</li>
+<li>w =&gt; Left</li>
+</ul>
+
+<p>Any other value, be it center, phteven or no value at all will result in a standard center crop.</p>
+
+<p>Note: when processed, the value is:</p>
+
+<ul>
+<li>Converted to lower case</li>
+<li>Any dashes, underscores, spaces are replaced with an empty string</li>
+<li>North/east/south/west written in full are converted to their single character representation</li>
+<li>As a result, North East or south-west are also valid values.</li>
+</ul>
+
+<h2 id="interlace">Interlace</h2>
+<pre class="highlight php"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{img|resize(300, 0)}&amp;interlace=plane"</span><span class="nt">&gt;</span>
+</code></pre>
+
+<p>Allows you to set the interlace method (progressive image).</p>
+
+<p>Possible values:</p>
+
+<ul>
+<li>line</li>
+<li>plane</li>
+</ul>
+
+<p>Any other value will result in no interlacing and as such is the default behaviour.</p>
+
+<p>Please note that interlacing PNGs actually makes them bigger, the image manipulator currently does nothing to prevent this.</p>
+
+<h2 id="crop">Crop</h2>
+<pre class="highlight php"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{img|resize(300, 150, 'crop')}&amp;crop[x]=3000&amp;crop[y]=1000&amp;crop[width]=600&amp;crop[height]=2000"</span><span class="nt">&gt;</span>
+</code></pre>
+
+<p>The crop settings allow you to specify an area that should be cropped out of the original, before applying the necessary size transformations.</p>
+
+<ul>
+<li>x =&gt; The X (horizontal coordinate) where the cropping should start</li>
+<li>y =&gt; The Y (vertical coordinate) where the cropping should start</li>
+<li>width =&gt; The width of the crop box</li>
+<li>height =&gt; The height of the crop box</li>
+</ul>
+
+<p>So say you have an image that&rsquo;s 5000 by 5000 pixels. You request a resized version as on the right.</p>
+
+<p>What you ultimately want is an image that is exactly 300x150. What the tool does first though, is grab an area 600x2000 out of the original 5000x5000 image, starting at 3000 pixels from the left, 1000 from the top. So the area it grabs is from 3000,1000 to 3600,3000.</p>
+
+<p>The ratio does not match however, so it will now resize that new 600x2000 &ldquo;image&rdquo; (crop) down to 300x1000 first. Then it crops off 425 pixels at both the top and bottom to get to that 150 height (1000 - 150 = 850 pixels too many, so it evenly cuts them off).
+If you had given it resize as method, it would resize that 600x2000 all the way down to 45x150. Without a height restriction you would&rsquo;ve received 300x1000. And so on.</p>
+
+<h2 id="effects">Effects</h2>
+<pre class="highlight php"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{img|resize(300, 150)}&amp;effects=greyscale"</span><span class="nt">&gt;</span>
+</code></pre>
+
+<p>Effects to apply to the image. This can be either comma separated (?effects=effect1,effect2) or as an array (?effects[]=effect1&amp;effects[]=effect2). The following are valid effects:</p>
+
+<ul>
+<li>greyscale
+
+<ul>
+<li>makes the image greyscale</li>
+<li>Aliases: bw, grayscale, desaturate</li>
+</ul></li>
+<li>invert
+
+<ul>
+<li>inverts the image</li>
+<li>Aliases: negative</li>
+</ul></li>
+<li>sepia
+
+<ul>
+<li>applies a sepia effect</li>
+</ul></li>
+</ul>
+
+<h2 id="format">Format</h2>
+<pre class="highlight php"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{img|resize(300, 0)}&amp;format=jpeg"</span><span class="nt">&gt;</span>
+</code></pre>
+
+<p>The output format. One of jpg, jpeg, png or gif. Gives exactly 0 fucks about any implications that come with these conversions, this is entirely up to the user; i.e. it will not prevent you from converting a transparent PNG to a JPG (and thus losing all transparency).</p>
+
 <h1 id="location-based-controls">Location based controls</h1>
+<pre class="highlight php"><code>{set location = user_location()}
+
+{set regions = ['US', 'GB']}
+
+{set selected_location = location.country_code }
+
+{if site.query.region|upper }
+    { set selected_location = site.query.region|upper }
+{elseif "Europe" in location.time_zone}
+    {set selected_location = 'GB'}
+{elseif selected_location not in regions}
+    { set selected_location = 'US' }
+{endif}
+
+</code></pre>
+
+<p>If you need to show different content based on a user&rsquo;s location, there is an object containing that information.</p>
+
+<p>This would be used in conjunction with an attribute to only show the relevant content.</p>
+
+<p>The example on the right checks for a <code class="prettyprint">?region=XX</code> query parameter in the url and overrides the user&rsquo;s IP based location with one set via the site, using a dropdown select for example.</p>
+
+<h1 id="device-detection">Device detection</h1>
+<pre class="highlight php"><code>{if user_device.mobile}
+    //Do Stuff
+{elseif user_device.tablet}
+    //Do Other Stuff
+{else}
+    //Do Default Stuff
+{endif}
+</code></pre>
+
+<p>If you need to detect the user&rsquo;s device in order to change the displayed content or functionality, <code class="prettyprint">user_device</code> will return true/false for mobile and tablet, as on the right.</p>
 
 <h1 id="useful-snippets">Useful Snippets</h1>
 
 <h2 id="next-and-previous-news">Next and Previous News</h2>
 
 <h2 id="multi-video-recent-work-pages">Multi video recent work pages</h2>
-<pre class="highlight php"><code>
+<pre class="highlight php"><code>{set full_playlist = [work]}
+{if work.campaign_name[0].value}
+    {for other_work in works}
+        {if other_work.campaign_name[0].value == work.campaign_name[0].value and other_work.id != work.id}
+            {set full_playlist = full_playlist|merge([other_work])}
+        {endif}
+    {endfor}
+{endif}
 </code></pre>
 
-<p>This works in conjunction with a custom attribute, with a comma separated list of video IDs.</p>
+<p>The example on the right uses a <code class="prettyprint">campaign_name</code> custom attribute. This would find all pieces of work with the same &#39;Campaign Name&rsquo; as the currently viewed work and assigns them to a new array <code class="prettyprint">full_playlist</code>.</p>
+
+<p>This array can then be looped through to show the work.</p>
 
 <h2 id="load-different-images-for-mobile">Load different images for mobile</h2>
 
@@ -488,6 +872,8 @@
 
       </div>
       <div class="dark-box">
+          <div class="lang-selector">
+          </div>
       </div>
     </div>
   </body>
