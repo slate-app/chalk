@@ -14,11 +14,11 @@
   background-color: #272822;
 }
 .highlight .err {
-  color: #151515;
-  background-color: #ac4142;
+  color: #272822;
+  background-color: #f92672;
 }
 .highlight .c, .highlight .cd, .highlight .cm, .highlight .c1, .highlight .cs {
-  color: #505050;
+  color: #75715e;
 }
 .highlight .cp {
   color: #f4bf75;
@@ -27,45 +27,45 @@
   color: #f4bf75;
 }
 .highlight .o, .highlight .ow {
-  color: #d0d0d0;
+  color: #f8f8f2;
 }
 .highlight .p, .highlight .pi {
-  color: #d0d0d0;
+  color: #f8f8f2;
 }
 .highlight .gi {
-  color: #90a959;
+  color: #a6e22e;
 }
 .highlight .gd {
-  color: #ac4142;
+  color: #f92672;
 }
 .highlight .gh {
-  color: #6a9fb5;
-  background-color: #151515;
+  color: #66d9ef;
+  background-color: #272822;
   font-weight: bold;
 }
 .highlight .k, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kv {
-  color: #aa759f;
+  color: #ae81ff;
 }
 .highlight .kc {
-  color: #d28445;
+  color: #fd971f;
 }
 .highlight .kt {
-  color: #d28445;
+  color: #fd971f;
 }
 .highlight .kd {
-  color: #d28445;
+  color: #fd971f;
 }
 .highlight .s, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
-  color: #90a959;
+  color: #a6e22e;
 }
 .highlight .sr {
-  color: #75b5aa;
+  color: #a1efe4;
 }
 .highlight .si {
-  color: #8f5536;
+  color: #cc6633;
 }
 .highlight .se {
-  color: #8f5536;
+  color: #cc6633;
 }
 .highlight .nn {
   color: #f4bf75;
@@ -77,13 +77,13 @@
   color: #f4bf75;
 }
 .highlight .na {
-  color: #6a9fb5;
+  color: #66d9ef;
 }
 .highlight .m, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mb, .highlight .mx {
-  color: #90a959;
+  color: #a6e22e;
 }
 .highlight .ss {
-  color: #90a959;
+  color: #a6e22e;
 }
     </style>
     <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
@@ -95,13 +95,11 @@
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="images/navbar.png" />
+        <img src="images/navbar.png" alt="Navbar" />
       </span>
     </a>
     <div class="tocify-wrapper">
-      <img src="images/logo.png" />
-        <div class="lang-selector">
-        </div>
+      <img src="images/logo.png" alt="Logo" />
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -132,7 +130,6 @@
 <h2 id="layout">Layout</h2>
 <pre class="highlight php"><code>{layout "html"}
 </code></pre>
-
 <p>Each whole-page template should start with the layout it will use.</p>
 
 <p>Layouts are used to speed up development, providing the main structure, as well as resuable blocks. Using a block in your template will overwrite the block defined in the layout. See below for more info on the block system.</p>
@@ -149,7 +146,6 @@
     {include "footer"}
 {endblock}
 </code></pre>
-
 <p>Inside your layout, you define how the page will be structured, and where other templates can inject their content.</p>
 
 <p>Content inside a block in the layout template acts as a default, and will be used until overridden.</p>
@@ -159,7 +155,6 @@
 <h2 id="includes">Includes</h2>
 <pre class="highlight php"><code>{include "alt_footer"}
 </code></pre>
-
 <p>Include any other template inside another one, useful for reusing code blocks, and hiding complexity from the main template.</p>
 
 <p>Template name must be in quotes.</p>
@@ -259,7 +254,6 @@
 
 {settings.logo}
 </code></pre>
-
 <p>Slate users are able to manage a lot of their basic settings, such as Company name, social profiles and logo from within their account. All of this data is available to use in the templates, to avoid hard coding anything.</p>
 
 <p>Make use of this in footers and contact pages etc.</p>
@@ -271,7 +265,6 @@
 {site.pathname}
 
 </code></pre>
-
 <p>In order to check the active page or perform anything more complex using the url, you&rsquo;ll need access to the <code class="prettyprint">site</code> object.</p>
 
 <h2 id="stylesheets-and-scripts">Stylesheets and Scripts</h2>
@@ -287,7 +280,6 @@ $('.selector').on('click', function() {
 });
 {endliteral}
 </code></pre>
-
 <p>In order to use inline CSS or JS, you need to escape the <code class="prettyprint">{}</code>, so that they&rsquo;re not interpreted as Chalk code. To do this, wrap your code blocks in <code class="prettyprint">{literal}</code> tags.</p>
 
 <h1 id="templates">Templates</h1>
@@ -319,7 +311,6 @@ $('.selector').on('click', function() {
     {endfor}
 {endblock}
 </code></pre>
-
 <p>The home template is used to generate the view on the root of the domain.</p>
 
 <p>The main block to replace on this page is <code class="prettyprint">{block content}</code> which will hold all of your content.</p>
@@ -342,7 +333,6 @@ $('.selector').on('click', function() {
   <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{director.avatar|resize(800, 450, 'crop')}"</span><span class="nt">&gt;</span>
 {endfor}
 </code></pre>
-
 <p>This template controls the layout and content of <code class="prettyprint">/directors/</code>.</p>
 
 <p>The snippet on the right Shows a list of all published directors, sorted by name.</p>
@@ -401,7 +391,6 @@ $('.selector').on('click', function() {
     {award.url}
 {endfor}
 </code></pre>
-
 <p>The <code class="prettyprint">director_profile</code> template controls the layout and content of <code class="prettyprint">/director/{director-name}</code>. </p>
 
 <p>The content on the right shows the basic content structure.</p>
@@ -420,7 +409,6 @@ $('.selector').on('click', function() {
 
 {endfor}
 </code></pre>
-
 <p>The <code class="prettyprint">recent_works_listing</code> is used to control the layout and contents of <code class="prettyprint">/work</code>.</p>
 
 <p><code class="prettyprint">{recent_works}</code> is an array containing all content added to Recent Work in the Slate admin.</p>
@@ -436,7 +424,6 @@ $('.selector').on('click', function() {
 
 {player}
 </code></pre>
-
 <h2 id="showreel">Showreel</h2>
 <pre class="highlight php"><code>{if showreel.is_expired}
     <span class="nt">&lt;p&gt;</span>This showreel has expired.<span class="nt">&lt;/p&gt;</span>
@@ -463,19 +450,15 @@ $('.selector').on('click', function() {
 
 {endif}
 </code></pre>
-
 <h2 id="project">Project</h2>
 <pre class="highlight php"><code>{director.name}
 </code></pre>
-
 <h2 id="project-folder">Project Folder</h2>
 <pre class="highlight php"><code>{director.name}
 </code></pre>
-
 <h2 id="resource-access-form">Resource Access Form</h2>
 <pre class="highlight php"><code>{director.name}
 </code></pre>
-
 <h2 id="news-listing">News Listing</h2>
 <pre class="highlight php"><code>{for article in news}
 
@@ -506,7 +489,6 @@ $('.selector').on('click', function() {
 
 {endfor}
 </code></pre>
-
 <h2 id="news-article">News Article</h2>
 <pre class="highlight php"><code>{article.title}
 {article.publication_date|date("d.m.y")}
@@ -525,27 +507,21 @@ $('.selector').on('click', function() {
     <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{video.thumbnail|resize(600, 340, 'crop')}"</span> <span class="na">data-mixed-media</span> <span class="na">data-playlist-item=</span><span class="s">"{loop.index0}"</span> <span class="na">data-action=</span><span class="s">"play"</span> <span class="na">data-player=</span><span class="s">"article_video"</span><span class="nt">&gt;</span>
 {endfor}
 </code></pre>
-
 <h2 id="photographer-listing">Photographer Listing</h2>
 <pre class="highlight php"><code>{director.name}
 </code></pre>
-
 <h2 id="photographer-profile">Photographer Profile</h2>
 <pre class="highlight php"><code>{director.name}
 </code></pre>
-
 <h2 id="player-embed-form">Player Embed Form</h2>
 <pre class="highlight php"><code>{director.name}
 </code></pre>
-
 <h2 id="player-embedded">Player Embedded</h2>
 <pre class="highlight php"><code>{director.name}
 </code></pre>
-
 <h1 id="player">Player</h1>
 <pre class="highlight php"><code>{director.name}
 </code></pre>
-
 <h1 id="pages">Pages</h1>
 
 <h2 id="using-layouts">Using layouts</h2>
@@ -557,7 +533,6 @@ $('.selector').on('click', function() {
 <h1 id="assets">Assets</h1>
 <pre class="highlight php"><code>{asset name="assetname.ext"}
 </code></pre>
-
 <p>In addition to the templates, Slate allows you full control over stylesheets, javascript files, fonts and images. </p>
 
 <p>These are all controlled via the &#39;Assets&rsquo; section, accessible via the link on the template listing screen.</p>
@@ -611,7 +586,6 @@ $('.selector').on('click', function() {
     {editor.value}
 {endfor}
 </code></pre>
-
 <p>This will build up a list of entries that can be reused to save the user typing the whole ting each time, and to avoid inconsistencies. Content is stored as an array.</p>
 
 <h2 id="file-upload">File Upload</h2>
@@ -621,7 +595,6 @@ $('.selector').on('click', function() {
 
 {work.spotlight_image.files[0].file|resize(1200, 0)}
 </code></pre>
-
 <p>Files are also stored in an array, and depending on their usage can be looped through or used to show a single item.</p>
 
 <h1 id="image-manipulation">Image manipulation</h1>
@@ -633,7 +606,6 @@ $('.selector').on('click', function() {
 <h2 id="width">Width</h2>
 <pre class="highlight php"><code>{img|resize(300, 0)}
 </code></pre>
-
 <p>Set in the <code class="prettyprint">|resize()</code> helper.</p>
 
 <p>The desired width of the image; it will resize according to the method you select (see below). If you do not want to restrict width, pass in 0 (0x100.jpg will only restrict to 100 height).</p>
@@ -641,7 +613,6 @@ $('.selector').on('click', function() {
 <h2 id="height">Height</h2>
 <pre class="highlight php"><code>{img|resize(0, 100)}
 </code></pre>
-
 <p>Set in the <code class="prettyprint">|resize()</code> helper.</p>
 
 <p>The desired height of the image; it will resize according to the method you select (see below). Set to 0 to not restrict height.</p>
@@ -651,7 +622,6 @@ $('.selector').on('click', function() {
 
 {img|resize(300, 150, 'crop')}
 </code></pre>
-
 <p>Set in the <code class="prettyprint">|resize()</code> helper.</p>
 
 <p>Resize is the default method</p>
@@ -661,7 +631,6 @@ $('.selector').on('click', function() {
 <h2 id="quality">Quality</h2>
 <pre class="highlight php"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{img|resize(300, 0)}&amp;quality=80"</span><span class="nt">&gt;</span>
 </code></pre>
-
 <p>The quality it should resample to; from 0 to 100. Will convert to 0-9 automatically for PNG, 1-100 for JPG.</p>
 
 <p>We recommend applying compression to all images.</p>
@@ -669,7 +638,6 @@ $('.selector').on('click', function() {
 <h2 id="gravity">Gravity</h2>
 <pre class="highlight php"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{img|resize(300, 150, 'crop')}&amp;gravity=n"</span><span class="nt">&gt;</span>
 </code></pre>
-
 <p>Used in combination with <code class="prettyprint">crop</code>, defines the area to crop from.</p>
 
 <p>Possible values:</p>
@@ -699,7 +667,6 @@ $('.selector').on('click', function() {
 <h2 id="interlace">Interlace</h2>
 <pre class="highlight php"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{img|resize(300, 0)}&amp;interlace=plane"</span><span class="nt">&gt;</span>
 </code></pre>
-
 <p>Allows you to set the interlace method (progressive image).</p>
 
 <p>Possible values:</p>
@@ -716,7 +683,6 @@ $('.selector').on('click', function() {
 <h2 id="crop">Crop</h2>
 <pre class="highlight php"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{img|resize(300, 150, 'crop')}&amp;crop[x]=3000&amp;crop[y]=1000&amp;crop[width]=600&amp;crop[height]=2000"</span><span class="nt">&gt;</span>
 </code></pre>
-
 <p>The crop settings allow you to specify an area that should be cropped out of the original, before applying the necessary size transformations.</p>
 
 <ul>
@@ -736,7 +702,6 @@ If you had given it resize as method, it would resize that 600x2000 all the way 
 <h2 id="effects">Effects</h2>
 <pre class="highlight php"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{img|resize(300, 150)}&amp;effects=greyscale"</span><span class="nt">&gt;</span>
 </code></pre>
-
 <p>Effects to apply to the image. This can be either comma separated (?effects=effect1,effect2) or as an array (?effects[]=effect1&amp;effects[]=effect2). The following are valid effects:</p>
 
 <ul>
@@ -762,7 +727,6 @@ If you had given it resize as method, it would resize that 600x2000 all the way 
 <h2 id="format">Format</h2>
 <pre class="highlight php"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{img|resize(300, 0)}&amp;format=jpeg"</span><span class="nt">&gt;</span>
 </code></pre>
-
 <p>The output format. One of jpg, jpeg, png or gif. Gives exactly 0 fucks about any implications that come with these conversions, this is entirely up to the user; i.e. it will not prevent you from converting a transparent PNG to a JPG (and thus losing all transparency).</p>
 
 <h1 id="location-based-controls">Location based controls</h1>
@@ -781,7 +745,6 @@ If you had given it resize as method, it would resize that 600x2000 all the way 
 {endif}
 
 </code></pre>
-
 <p>If you need to show different content based on a user&rsquo;s location, there is an object containing that information.</p>
 
 <p>This would be used in conjunction with an attribute to only show the relevant content.</p>
@@ -797,7 +760,6 @@ If you had given it resize as method, it would resize that 600x2000 all the way 
     //Do Default Stuff
 {endif}
 </code></pre>
-
 <p>If you need to detect the user&rsquo;s device in order to change the displayed content or functionality, <code class="prettyprint">user_device</code> will return true/false for mobile and tablet, as on the right.</p>
 
 <h1 id="useful-snippets">Useful Snippets</h1>
@@ -814,7 +776,6 @@ If you had given it resize as method, it would resize that 600x2000 all the way 
     {endfor}
 {endif}
 </code></pre>
-
 <p>The example on the right uses a <code class="prettyprint">campaign_name</code> custom attribute. This would find all pieces of work with the same &#39;Campaign Name&rsquo; as the currently viewed work and assigns them to a new array <code class="prettyprint">full_playlist</code>.</p>
 
 <p>This array can then be looped through to show the work.</p>
@@ -832,7 +793,6 @@ If you had given it resize as method, it would resize that 600x2000 all the way 
     {set img_url = object.thumbnail|resize(549,309, 'crop')}
 {endif}
 </code></pre>
-
 <blockquote>
 <p>img_url can then be used in the src in your loops</p>
 </blockquote>
@@ -865,15 +825,12 @@ If you had given it resize as method, it would resize that 600x2000 all the way 
     { set selected_clip = player_media[0] }
 {endif}
 </code></pre>
-
 <p>By adding <code class="prettyprint">data-clip-id={work.id}</code> to each item in your list of videos on a director&rsquo;s profile, you can make use of in built pushstates.</p>
 
 <p>When accessing one of these urls directly, it will set the <code class="prettyprint">selected_clip</code>, and you can then use that to change the first video that loads on the page.</p>
 
       </div>
       <div class="dark-box">
-          <div class="lang-selector">
-          </div>
       </div>
     </div>
   </body>
