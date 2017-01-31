@@ -188,6 +188,8 @@ Videos, Images, Artists and News can all be added to a spotlight. As they have d
 
 Usually where you put your site's navigation etc. The header template needs to be included in other templates to be used. It comes packaged in `{block header}` in the default HTML template.
 
+If you need to include the header anywhere manually, use `{include "header"}`
+
 ## Footer
 
 Works as per the header.
@@ -280,6 +282,11 @@ The publication date for Recent Work items is taken from the linked library vide
 
 {player}
 ```
+
+The `recent_works_view` is used to control the layout and contents of individual pieces of work on `/work/work-name`.
+
+`{work}` is an array including all the data about the Recent Work item. It contains `associated_media` which relates to the actual library entry that was added to Recent Work.
+
 ## Showreel
 ```php
 {if showreel.is_expired}
@@ -307,6 +314,15 @@ The publication date for Recent Work items is taken from the linked library vide
 
 {endif}
 ```
+
+This is the template that is used for showreels. 
+
+Video playback tracking and showreel view notifications and tracking are all handled automatically.
+
+See [Player](#player) below for more info on the player code.
+
+Make sure to include the checks for expired and deleted reels, otherwise user input in the admin won't be reflected in the template.
+
 ## Project
 ```php
 {director.name}
