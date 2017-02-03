@@ -302,7 +302,12 @@ The `recent_works_view` is used to control the layout and contents of individual
 
         {work.title}
         {work.client.name}
-        <img  src="work.thumbnail|resize(800, 450, 'crop')}" data-player-item data-mixed-media data-action="play" data-playlist-item="{loop.index0}" data-player="showreel">
+        <img  src="work.thumbnail|resize(800, 450, 'crop')}" 
+        data-player-item 
+        data-mixed-media 
+        data-action="play" 
+        data-playlist-item="{loop.index0}" 
+        data-player="showreel">
 
     {endfor}
 
@@ -323,14 +328,42 @@ See [Player](#player) below for more info on the player code.
 
 Make sure to include the checks for expired and deleted reels, otherwise user input in the admin won't be reflected in the template.
 
+In the default tempalte the download option is also conditional on the user not being on a mobile device.
+
 ## Project
 ```php
-{director.name}
+{project.name}
 ```
+
+Layout for the root of a project.
+
+Projects are used for delivering assets to users.
+
+There are 4 data types to be aware of in Projects.
+
+- Project
+- Folder
+- Section
+- Item
+
+Items are always in Sections.
+Sections can be in a folder or just in the project.
+Folders can be in folders or in sections in a folder.
+Folders can also be in the project root.
+
+All of these situations need considering when building out your template. The basic template is a good guide to use.
+
+`{project}` is populated with all the data from the currently viewed project.
+
 ## Project Folder
 ```php
 {director.name}
 ```
+
+An extension of the above.
+
+`{folder}` is populated with all the data from the currently viewed folder.
+
 ## Resource Access Form
 ```php
 {director.name}
@@ -366,6 +399,29 @@ Make sure to include the checks for expired and deleted reels, otherwise user in
 
 {endfor}
 ```
+
+`{news_listing}` shows content added via the news module. There are 4 types of news:
+
+### News
+This is your default type of news to build. It contains the following.
+
+- Artwork
+- Teaser
+- Content
+- Clips
+- Photos
+
+### Link
+
+- Artwork
+- Destination link
+
+### Clip
+### Director
+
+
+
+
 ## News Article
 ```php
 {article.title}
